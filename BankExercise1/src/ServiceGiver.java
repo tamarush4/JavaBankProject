@@ -3,6 +3,7 @@ import java.util.List;
 
 public abstract class ServiceGiver implements Runnable {
 	
+	protected int id;
 	protected List<Customer> custQ;
 	protected Customer currCustomer;
 	protected static Object mutex;

@@ -14,7 +14,7 @@ public class Banker extends ServiceGiver {
 	@Override
 	protected void addCustomerToQueue(Customer c) {
 		custQ.add(c);
-		System.out.println(c+" is added to Line for Banker");
+		System.out.println(c+" is added to Line for " + this);
 		
 		//log
 	}
@@ -31,12 +31,17 @@ public class Banker extends ServiceGiver {
 			if(!custQ.isEmpty()){
 				for(Customer c : custQ){
 						synchronized(c){
-							System.out.println("Banker is Notifying Customer");
+							System.out.println("Banker " + this + " is Notifying Customer: " + c);
 							c.notify();
 						}
 				}	
 			}
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "Banker [id=" + id + "]";
 	}
 
 }

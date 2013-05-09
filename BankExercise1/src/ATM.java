@@ -2,15 +2,23 @@ import java.util.ArrayList;
 
 
 public class ATM extends ServiceGiver {
-
-	public ATM(){
+	private String address;
+	
+	public ATM(int id, String address){
+		this.id = id;
+		this.address = address;
 		custQ = new ArrayList<Customer>();
 	}
 	
 	@Override
+	public String toString() {
+		return "ATM [id=" + id +" Address=" + address +  "]";
+	}
+
+	@Override
 	protected void addCustomerToQueue(Customer c) {
 		custQ.add(c);
-		System.out.println(c+" is added to Line for ATM");
+		System.out.println(c+" is added to Line for " + this);
 		
 		//log
 		
@@ -25,8 +33,13 @@ public class ATM extends ServiceGiver {
 	@Override
 	public void run() {
 		synchronized(mutex){
-			for(Customer c : custQ){
-				c.notify();
+			if(!custQ.isEmpty()){
+				for(Customer c : custQ){
+						synchronized(c){
+							System.out.println("ATM " + this +" is Notifying Customer: " + c);
+							c.notify();
+						}
+				}	
 			}
 		}
 	}

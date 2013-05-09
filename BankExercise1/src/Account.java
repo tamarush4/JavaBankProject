@@ -1,12 +1,13 @@
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class Account {
 	public static final int STUDENT_DISCOUNT = 20;
 	public static final int SOLDIER_DISCOUNT = 15;
-	public static final int BUSSINESS_DISCOUNT = 10;
+	public static final int BUSINESS_DISCOUNT = 10;
 	
-	enum AccountType{Soldier, Student, Bussiness};
+	enum AccountType{Soldier, Student, Business};
 	
 	static int accountNumber= 0; //for account indexing in the bank
 	
@@ -22,9 +23,15 @@ public class Account {
 		this.aType = aType;
 		this.balance = 0;
 		this.id = ++accountNumber;
+		setDiscount();
+		actionHistory = new ArrayList();
+		authorized = new ArrayList();
 	}
 	
-	
+	public Account(AccountType aType, double balance) {
+		this(aType);
+		this.balance = balance;
+	}
 	
 	@Override
 	public String toString() {
@@ -86,8 +93,8 @@ public class Account {
 				this.discount = STUDENT_DISCOUNT;
 			else if(aType == AccountType.Soldier)
 				this.discount = SOLDIER_DISCOUNT;
-			else if(aType == AccountType.Bussiness)
-				this.discount = BUSSINESS_DISCOUNT;
+			else if(aType == AccountType.Business)
+				this.discount = BUSINESS_DISCOUNT;
 			else
 				this.discount = 0;
 			}		

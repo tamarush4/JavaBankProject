@@ -9,16 +9,20 @@
 		<bank id="1" name="Discount Bavli" commission="2.1">
 			<employee id="111" name="emp1"/>
 			<employee id="222" name="emp2"/>
-			<customer id="1111" name="cust1">
-				<authorization type="input" from="Afeka"/>
-				<authorization type="output" from="ElectricityCompany"/>
-				<authorization type="output" from="TelAviv Arnona"/>
-			</customer>
-			<customer id="222" name="cust2">
-				<authorization type="input" from="Zara"/>
-				<authorization type="output" from="ElectricityCompany"/>
-				<authorization type="output" from="Raanana Arnona"/>
-			</customer>
 		</bank>
 	</banks>
+	<customers>
+		<customer name="momo">
+			<account type="Student" balance="100"/>
+		</customer>
+		<customer name="gogo">
+			<account type="Student" balance="300"/>
+		</customer>
+		<customer name="yoyo">
+			<account type="Soldier" balance="200"/>
+		</customer>
+		<customer name="koko">
+			<account type="Business" balance="10000"/>
+		</customer>
+	</customers>
 </banksSystem>

@@ -37,6 +37,12 @@ public class Customer implements Runnable{
 		accounts.add(theAccount);
 	}
 	
+	public void printAccouns(){
+		for(Account tempAccount: this.accounts){
+			System.out.println(tempAccount);
+		}
+	}
+	
 	public void setAccountForAction(int accountID){
 		if(!this.accounts.isEmpty()){
 			for(Account tempAccount: this.accounts){
