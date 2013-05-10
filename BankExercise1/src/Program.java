@@ -16,9 +16,42 @@ public class Program {
 	 * @throws IOException 
 	 * @throws SecurityException 
 	 */
-
+	public static void testThreads(){
+		BankLogger myBankLogger = new BankLogger();
+		//List<ATM> allAtms = createXMLATMs();
+		List<Customer> allCustomers = createXMLCustomers(myBankLogger);
+		List<Banker> allBankers = createXMLBankers(myBankLogger);
+		Banker theBanker = allBankers.get(0);
+		//start banker'
+		Runnable rb = theBanker;
+		Thread tb = new Thread(rb);
+		tb.start();
+		//register all customers to the same banker with withdraw action of 10 shekels
+		System.out.println("WELCOME TO BANK!");
+		for(Customer c : allCustomers){
+			int accountID = c.getCustId();
+			c.setAccountForAction(accountID);
+			boolean isBanker = true;
+			int amount = 10;
+			WithdrawOrDeposit withdraw = new WithdrawOrDeposit(-amount, isBanker);
+			c.applyAction(withdraw);
+			theBanker.addCustomerToQueue(c);
+		}
+		for (int i=0 ; i < allCustomers.size() ; i++) {
+			try {
+				allCustomers.get(i).join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		theBanker.close();
+		System.out.println("GoodBye!");
+	}
 	public static void main(String[] args) throws SecurityException, IOException {
-		double amount;
+		testThreads();
+		/*double amount;
 		String answer;
 		boolean isBanker;
 		boolean isRunning=true;
@@ -34,6 +67,18 @@ public class Program {
 		ArrayList<Action> ActionsListForExecution= new ArrayList<Action>();
 		System.out.println("WELCOME TO BANK!");
 		
+		//start all threads of bankers and ATMs
+		List<ATM> atms = createXMLATMs();
+		for(ATM atm : atms){
+			Runnable ra = atm;
+			Thread ta = new Thread(ra);
+			ta.start();
+		}
+		for(Banker b : chosenBankers){
+			Runnable rb = b;
+			Thread tb = new Thread(rb);
+			tb.start();
+		}	
 		while(isRunning){
 			//Print Customers in xml & choose
 			Customer c1 = chooseCustomer(allCustomers);
@@ -119,11 +164,6 @@ public class Program {
 						Thread ta = new Thread(ra);
 						ta.start();
 					}
-					for(Customer c:chosenCustomers){
-						Runnable rc=c;
-						Thread tc = new Thread(rc);
-						tc.start();
-					}
 					for(Banker b : chosenBankers){
 						Runnable rb = b;
 						Thread tb = new Thread(rb);
@@ -143,7 +183,7 @@ public class Program {
 		
 		//finally-after loop
 		System.out.println("Goodbye!");
-		theScanner.close();
+		theScanner.close();*/
 		
 	}
 	public static ATM chooseATM(){
@@ -198,11 +238,29 @@ public class Program {
 				String address = eElement.getAttribute("location");	
 				ATM newAtm = new ATM(id, address);
 				atms.add(newAtm);
-				System.out.println(newAtm);
+				//System.out.println(newAtm);
 			}
 		}
 		return atms;
 	}
+	
+	public static List<Banker> createXMLBankers(BankLogger theLogger){
+		List<Banker> bankers = new ArrayList<>();
+		XMLReader xmlR = new XMLReader();
+		NodeList bankersFromXML = xmlR.readNodeFromFile("banker");
+		for(int i=0; i<bankersFromXML.getLength(); i++){
+			Node currBanker = bankersFromXML.item(i);
+			if (currBanker.getNodeType() == Node.ELEMENT_NODE) {
+				Element eElement = (Element) currBanker;
+				int id = Integer.parseInt(eElement.getAttribute("id"));
+				Banker newBanker = new Banker(id, theLogger);
+				bankers.add(newBanker);
+				//System.out.println(newAtm);
+			}
+		}
+		return bankers;
+	}
+	
 	public static List<Account> createAllXMLAccounts(){
 		List<Account> accounts = new ArrayList<>();
 		XMLReader xmlR = new XMLReader();

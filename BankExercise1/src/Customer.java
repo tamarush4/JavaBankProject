@@ -5,7 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.SimpleFormatter;
 
 
-public class Customer implements Runnable{
+public class Customer extends Thread{
 	
 	private static int idGenerator=0;
 	private int id;
@@ -15,6 +15,7 @@ public class Customer implements Runnable{
 	private FileHandler customerHanlder;
 	private Action customerAction;
 	private Account currentAccount;
+	private ServiceGiver currentHandlingServiceGiver;
 	
 	public Customer(){
 		super();
@@ -61,12 +62,12 @@ public class Customer implements Runnable{
 	
 	@Override
 	public void run() {
-		System.out.println(this + " is now running");
+		System.out.println("Customer " + this + " ::run");
 		theBankLogger.getTheLogger().log(Level.INFO, "You are now running");
 		
 		try {
 			synchronized(this){
-				System.out.println(this + " is waiting");
+				System.out.println(this + " is waiting in queue");
 				theBankLogger.getTheLogger().log(Level.INFO, "You are waiting");
 				this.wait();
 				System.out.println(this + " has finished waiting");
@@ -81,23 +82,43 @@ public class Customer implements Runnable{
 		System.out.println("Finished executing action on account #" + currentAccount.getId());
 		theBankLogger.getTheLogger().log(Level.INFO, "---Finished executing action on acount #" + currentAccount.getId());
 			//write details to log 
-		System.out.println(this + " has finished running");
+		System.out.println("Customer " + this + " has finished running");
 		theBankLogger.getTheLogger().log(Level.INFO, "You have finished running");
+		//notify service giver that finished
+		synchronized(currentHandlingServiceGiver){
+			currentHandlingServiceGiver.notify();
+		}
 	}
 
 	@Override
 	public String toString() {
-		return "Customer [id=" + id + ", name=" + name + "]";
+		//return "Customer [id=" + id + ", name=" + name + "]";
+		return this.name + " id: " + this.id;
 	}
 
-	public int getId() {
+	public int getCustId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setCustId(int id) {
 		this.id = id;
 	}
+
+	public String getCustName() {
+		return name;
+	}
+
+	public void setCustName(String name) {
+		this.name = name;
+	}
 	
-	
+	public ServiceGiver getCurrentHandlingServiceGiver() {
+		return currentHandlingServiceGiver;
+	}
+
+	public void setCurrentHandlingServiceGiver(
+			ServiceGiver currentHandlingServiceGiver) {
+		this.currentHandlingServiceGiver = currentHandlingServiceGiver;
+	}
 	
 }

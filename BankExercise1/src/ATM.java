@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 
 public class ATM extends ServiceGiver {
@@ -7,7 +8,7 @@ public class ATM extends ServiceGiver {
 	public ATM(int id, String address){
 		this.id = id;
 		this.address = address;
-		custQ = new ArrayList<Customer>();
+		waitingCustomers = new LinkedList<Customer>();
 	}
 	
 	@Override
@@ -17,7 +18,7 @@ public class ATM extends ServiceGiver {
 
 	@Override
 	protected void addCustomerToQueue(Customer c) {
-		custQ.add(c);
+		waitingCustomers.add(c);
 		System.out.println(c+" is added to Line for " + this);
 		
 		//log
@@ -25,16 +26,10 @@ public class ATM extends ServiceGiver {
 	}
 
 	@Override
-	protected void handleCustomer(Customer c) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void run() {
 		synchronized(mutex){
-			if(!custQ.isEmpty()){
-				for(Customer c : custQ){
+			if(!waitingCustomers.isEmpty()){
+				for(Customer c : waitingCustomers){
 						synchronized(c){
 							System.out.println("ATM " + this +" is Notifying Customer: " + c);
 							c.notify();
@@ -43,7 +38,19 @@ public class ATM extends ServiceGiver {
 			}
 		}
 	}
+
+	@Override
+	protected void notifyCustomer() {
+		// TODO Auto-generated method stub
+		
+	}
 	
-	
+	@Override
+	protected void close() {
+		isOpen = false;
+		synchronized (mutex) {
+			mutex.notifyAll();
+		}
+	}
 
 }

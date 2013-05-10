@@ -5,12 +5,11 @@
 		<atm id="2" location="Yehuda Hamacabi 23, Holon"/>
 		<atm id="3" location="Jabotinski 15, Jerusalem"/>
 	</atms>
-	<banks>
-		<bank id="1" name="Discount Bavli" commission="2.1">
-			<employee id="111" name="emp1"/>
-			<employee id="222" name="emp2"/>
-		</bank>
-	</banks>
+	<bankers>
+		<banker id="1" />
+		<banker id="2" />
+		<banker id="3" />
+	</bankers>
 	<customers>
 		<customer name="momo">
 			<account type="Student" balance="100"/>
