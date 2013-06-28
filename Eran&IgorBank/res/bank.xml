@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<banksSystem>
+	<atms>
+		<atm id="1" location="Ben Yehuda 142, Tel Aviv"/>
+		<atm id="2" location="Yehuda Hamacabi 23, Holon"/>
+		<atm id="3" location="Jabotinski 15, Jerusalem"/>
+	</atms>
+	<banks>
+		<bank id="1" name="Discount Bavli" commission="2.1">
+			<banker id="111" name="banker1"/>
+			<banker id="222" name="banker2"/>
+			<client id="111" name="client1"  cash="50000">
+				<authorization type="input" from="Afeka"/>
+				<authorization type="output" from="ElectricityCompany"/>
+				<authorization type="output" from="TelAviv Arnona"/>
+			</client>
+			<client id="222" name="client2" cash="30000">
+				<authorization type="input" from="Zara"/>
+				<authorization type="output" from="ElectricityCompany"/>
+				<authorization type="output" from="Raanana Arnona"/>
+			</client>
+			<client id="333" name="client3" cash="15000">
+				<authorization type="input" from="Castro"/>
+				<authorization type="output" from="Ramat-Gan Arnona"/>
+			</client>
+			<client id="444" name="client4" cash="12000">
+				<authorization type="input" from="Disel"/>
+				<authorization type="output" from="Bezeq"/>
+			</client>
+			
+		</bank>
+	</banks>
+</banksSystem>
